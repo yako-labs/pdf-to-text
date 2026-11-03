@@ -10,8 +10,9 @@ use Symfony\Component\Process\Process;
 
 class Binary
 {
-    public const PDFTOTEXT = 'pdftotext';
+    public const PDFFONTS = 'pdffonts';
     public const PDFINFO = 'pdfinfo';
+    public const PDFTOTEXT = 'pdftotext';
 
     /** Get the full path to the binary */
     public static function path(string $binary): ?string
