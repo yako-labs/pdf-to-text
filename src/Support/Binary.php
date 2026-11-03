@@ -11,6 +11,7 @@ use Symfony\Component\Process\Process;
 class Binary
 {
     public const PDFTOTEXT = 'pdftotext';
+    public const PDFINFO = 'pdfinfo';
 
     /** Get the full path to the binary */
     public static function path(string $binary): ?string
@@ -42,6 +43,18 @@ class Binary
     public static function version(string $binary): string
     {
         $process = new Process([$binary, '-v']);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            return $process->getErrorOutput();
+        }
+
+        ExceptionHandler::fromProcess($process);
+    }
+
+    public static function help(string $binary): string
+    {
+        $process = new Process([$binary, '-h']);
         $process->run();
 
         if ($process->isSuccessful()) {

@@ -13,6 +13,11 @@ test('get pdftotext version', function () {
         ->toContain('pdftotext version');
 });
 
+test('get pdftotext help', function () {
+    expect(PdfToText::help())
+        ->toContain('Usage: pdftotext');
+});
+
 test('default command', function () {
     $pdf = PdfToText::from('file.pdf');
 

@@ -58,7 +58,7 @@ class PdfToText
     }
 
     /** Get the PDF file path */
-    public function pdf(): ?string
+    public function pdf(): string
     {
         return $this->pdf;
     }
@@ -318,25 +318,10 @@ class PdfToText
         return $this->textFile('-')->run();
     }
 
-    public function process(): Process
-    {
-        Binary::require(self::BINARY);
-
-        return new Process($this->buildCommand());
-    }
-
     /** Execute the pdftotext command and return the output */
     public function run(): string
     {
-        $process = $this->process();
-
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            return $process->getOutput();
-        }
-
-        ExceptionHandler::fromProcess($process);
+        return Binary::run($this->buildCommand());
     }
 
     /** Check if pdftotext is available in the system */
@@ -349,6 +334,11 @@ class PdfToText
     public static function version(): string
     {
         return Binary::version(self::BINARY);
+    }
+
+    public static function help(): string
+    {
+        return Binary::help(self::BINARY);
     }
 
     public function toArray(): array
