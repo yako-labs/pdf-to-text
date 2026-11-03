@@ -1,0 +1,21 @@
+{
+    "name": "yako-labs/pdf-to-text",
+    "keywords": ["pdf", "poppler", "poppler-utils", "pdftotext"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "yako"
+        }
+    ],
+    "require": {
+        "php": "^8.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "YakoLabs\\PdfToText\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
