@@ -17,6 +17,7 @@ class PdfFonts
         '-upw' => null,
     ];
 
+    /** @param string $pdf PDF file path */
     public function __construct(
         protected readonly string $pdf
     ) {}
@@ -73,7 +74,7 @@ class PdfFonts
         return $this;
     }
 
-    /** @return string[] Build the pdftotext command array */
+    /** @return string[] Build the pdffonts command array */
     protected function buildCommand(): array
     {
         $command = [self::BINARY];
@@ -92,29 +93,31 @@ class PdfFonts
         return $command;
     }
 
-    /** Execute the pdftotext command and return the output */
+    /** Execute the pdffonts command and return the output */
     public function run(): string
     {
         return Binary::run($this->buildCommand());
     }
 
-    /** Check if pdftotext is available in the system */
+    /** Check if pdffonts is available in the system */
     public static function isBinaryFound(): bool
     {
         return Binary::exists(self::BINARY);
     }
 
-    /** Get pdftotext version and copyright information */
+    /** Get pdffonts version and copyright information */
     public static function version(): string
     {
         return Binary::version(self::BINARY);
     }
 
+    /** Print pdffonts usage information */
     public static function help(): string
     {
         return Binary::help(self::BINARY);
     }
 
+    /** Get command options and input as an array */
     public function toArray(): array
     {
         return array_merge(
@@ -125,6 +128,7 @@ class PdfFonts
         );
     }
 
+    /** Build the command as a string */
     public function toString(): string
     {
         return implode(' ', $this->buildCommand());

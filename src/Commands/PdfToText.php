@@ -47,6 +47,7 @@ class PdfToText
     /** @var string|null <text-file> output text file path */
     protected ?string $textFile = null;
 
+    /** @param string $pdf PDF file path */
     public function __construct(
         protected readonly string $pdf
     ) {}
@@ -336,11 +337,13 @@ class PdfToText
         return Binary::version(self::BINARY);
     }
 
+    /** Print pdftotext usage information */
     public static function help(): string
     {
         return Binary::help(self::BINARY);
     }
 
+    /** Get command options, input and output as an array */
     public function toArray(): array
     {
         return array_merge(
@@ -352,6 +355,7 @@ class PdfToText
         );
     }
 
+    /** Build the command as a string */
     public function toString(): string
     {
         return implode(' ', $this->buildCommand());
