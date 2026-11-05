@@ -5,9 +5,11 @@ namespace YakoLabs\PdfToText;
 use YakoLabs\PdfToText\Commands\PdfFonts;
 use YakoLabs\PdfToText\Commands\PdfInfo;
 use YakoLabs\PdfToText\Commands\PdfToText;
+use YakoLabs\PdfToText\Commands\PdfUnite;
 
 final class PDF
 {
+    /** @param string $pdf PDF file path */
     public function __construct(
         protected string $pdf
     ) {}
@@ -40,5 +42,11 @@ final class PDF
     public function toText(): PdfToText
     {
         return new PdfToText($this->pdf);
+    }
+
+    /** Create a PdfUnite command instance */
+    public static function unite(array $pdfs): PdfUnite
+    {
+        return new PdfUnite($pdfs);
     }
 }

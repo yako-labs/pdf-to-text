@@ -13,6 +13,7 @@ class Binary
     public const PDFFONTS = 'pdffonts';
     public const PDFINFO = 'pdfinfo';
     public const PDFTOTEXT = 'pdftotext';
+    public const PDFUNITE = 'pdfunite';
 
     /** Get the full path to the binary */
     public static function path(string $binary): ?string
@@ -53,6 +54,7 @@ class Binary
         ExceptionHandler::fromProcess($process);
     }
 
+    /** Print binary usage information */
     public static function help(string $binary): string
     {
         $process = new Process([$binary, '-h']);

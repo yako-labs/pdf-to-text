@@ -40,7 +40,7 @@ class PdfInfo
     }
 
     /** Get the PDF file path */
-    public function pdf(): ?string
+    public function pdf(): string
     {
         return $this->pdf;
     }
@@ -192,8 +192,14 @@ class PdfInfo
         return $command;
     }
 
+    /** Execute the pdfinfo command and get the info */
+    public function get(): string
+    {
+        return $this->run();
+    }
+
     /** Execute the pdfinfo command and return the output */
-    public function run(): string
+    protected function run(): string
     {
         return Binary::run($this->buildCommand());
     }

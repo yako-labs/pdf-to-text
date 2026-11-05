@@ -2,9 +2,7 @@
 
 namespace YakoLabs\PdfToText\Commands;
 
-use YakoLabs\PdfToText\Exceptions\ExceptionHandler;
 use YakoLabs\PdfToText\Support\Binary;
-use Symfony\Component\Process\Process;
 
 class PdfToText
 {
@@ -300,7 +298,7 @@ class PdfToText
     /** Save extracted text to the original PDF file name with .txt extension */
     public function save(): true
     {
-        $this->textFile(null)->run();
+        $this->run();
 
         return true;
     }
@@ -308,9 +306,7 @@ class PdfToText
     /** Save extracted text to a specific file path */
     public function saveAs(string $path): true
     {
-        $this->textFile($path)->run();
-
-        return true;
+        return $this->textFile($path)->save();
     }
 
     /** Extract text and return it as a string (outputs to stdout) */
@@ -320,7 +316,7 @@ class PdfToText
     }
 
     /** Execute the pdftotext command and return the output */
-    public function run(): string
+    protected function run(): string
     {
         return Binary::run($this->buildCommand());
     }

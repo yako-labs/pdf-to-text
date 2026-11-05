@@ -29,7 +29,7 @@ class PdfFonts
     }
 
     /** Get the PDF file path */
-    public function pdf(): ?string
+    public function pdf(): string
     {
         return $this->pdf;
     }
@@ -93,8 +93,14 @@ class PdfFonts
         return $command;
     }
 
+    /** Execute pdffonts and return the font listing */
+    public function all(): string
+    {
+        return $this->run();
+    }
+
     /** Execute the pdffonts command and return the output */
-    public function run(): string
+    protected function run(): string
     {
         return Binary::run($this->buildCommand());
     }
