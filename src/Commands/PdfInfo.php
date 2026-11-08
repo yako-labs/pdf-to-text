@@ -2,12 +2,8 @@
 
 namespace YakoLabs\PdfToText\Commands;
 
-use YakoLabs\PdfToText\Support\Binary;
-
-class PdfInfo
+class PdfInfo extends Command
 {
-    public const BINARY = Binary::PDFINFO;
-
     /** @var array<string, mixed> Command options */
     protected array $command = [
         '-f' => null,
@@ -28,6 +24,12 @@ class PdfInfo
         '-upw' => null,
     ];
 
+    /** Get the pdfinfo binary name */
+    public static function binary(): string
+    {
+        return 'pdfinfo';
+    }
+
     /** @param string $pdf PDF file path */
     public function __construct(
         protected readonly string $pdf
@@ -45,7 +47,7 @@ class PdfInfo
         return $this->pdf;
     }
 
-    /** Set -f <int> first page to convert */
+    /** Set -f <int> first page to process */
     public function firstPage(?int $page): self
     {
         $this->command['-f'] = $page;
@@ -53,7 +55,7 @@ class PdfInfo
         return $this;
     }
 
-    /** Set -l <int> last page to convert */
+    /** Set -l <int> last page to process */
     public function lastPage(?int $page): self
     {
         $this->command['-l'] = $page;
@@ -174,9 +176,9 @@ class PdfInfo
     }
 
     /** @return string[] Build the pdfinfo command array */
-    protected function buildCommand(): array
+    protected function build(): array
     {
-        $command = [self::BINARY];
+        $command = [self::binary()];
 
         foreach ($this->command as $key => $value) {
             if ($value === true) {
@@ -186,7 +188,7 @@ class PdfInfo
                 $command[] = (string) $value;
             }
         }
-        
+
         $command[] = $this->pdf;
 
         return $command;
@@ -198,30 +200,6 @@ class PdfInfo
         return $this->run();
     }
 
-    /** Execute the pdfinfo command and return the output */
-    protected function run(): string
-    {
-        return Binary::run($this->buildCommand());
-    }
-
-    /** Check if pdfinfo is available in the system */
-    public static function isBinaryFound(): bool
-    {
-        return Binary::exists(self::BINARY);
-    }
-
-    /** Get pdfinfo version and copyright information */
-    public static function version(): string
-    {
-        return Binary::version(self::BINARY);
-    }
-
-    /** Print pdfinfo usage information */
-    public static function help(): string
-    {
-        return Binary::help(self::BINARY);
-    }
-
     /** Get command options and input as an array */
     public function toArray(): array
     {
@@ -231,17 +209,5 @@ class PdfInfo
                 'input' => $this->pdf,
             ]
         );
-    }
-
-    /** Build the command as a string */
-    public function toString(): string
-    {
-        return implode(' ', $this->buildCommand());
-    }
-
-    /** Convert to string representation of the command */
-    public function __toString(): string
-    {
-        return $this->toString();
     }
 }

@@ -4,12 +4,16 @@ namespace YakoLabs\PdfToText\Commands;
 
 use YakoLabs\PdfToText\Support\Binary;
 
-class PdfUnite
+class PdfUnite extends Command
 {
-    public const BINARY = Binary::PDFUNITE;
-
     /** @var string|null Destination PDF file path */
     protected ?string $destinationFile = null;
+
+    /** Get the pdfunite binary name */
+    public static function binary(): string
+    {
+        return 'pdfunite';
+    }
 
     /** @param string[] $pdfs PDF files to merge */
     public function __construct(
@@ -45,9 +49,9 @@ class PdfUnite
     }
 
     /** @return string[] Build the pdfunite command array */
-    protected function buildCommand(): array
+    protected function build(): array
     {
-        $command = [self::BINARY];
+        $command = [self::binary()];
 
         foreach ($this->pdfs as $pdf) {
             $command[] = $pdf;
@@ -72,45 +76,9 @@ class PdfUnite
         return $this->destinationFile($path)->save();
     }
 
-    /** Execute the pdfunite command and return the output */
-    protected function run(): string
-    {
-        return Binary::run($this->buildCommand());
-    }
-
-    /** Check if pdfunite is available in the system */
-    public static function isBinaryFound(): bool
-    {
-        return Binary::exists(self::BINARY);
-    }
-
-    /** Get pdfunite version and copyright information */
-    public static function version(): string
-    {
-        return Binary::version(self::BINARY);
-    }
-
-    /** Print pdfunite usage information */
-    public static function help(): string
-    {
-        return Binary::help(self::BINARY);
-    }
-
     /** Get the PDF files to merge as an array */
     public function toArray(): array
     {
         return $this->pdfs();
-    }
-
-    /** Build the command as a string */
-    public function toString(): string
-    {
-        return implode(' ', $this->buildCommand());
-    }
-
-    /** Convert to string representation of the command */
-    public function __toString(): string
-    {
-        return $this->toString();
     }
 }

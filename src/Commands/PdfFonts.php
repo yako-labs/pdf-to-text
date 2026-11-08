@@ -2,12 +2,8 @@
 
 namespace YakoLabs\PdfToText\Commands;
 
-use YakoLabs\PdfToText\Support\Binary;
-
-class PdfFonts
+class PdfFonts extends Command
 {
-    public const BINARY = Binary::PDFFONTS;
-
     /** @var array<string, mixed> Command options */
     protected array $command = [
         '-f' => null,
@@ -16,6 +12,12 @@ class PdfFonts
         '-opw' => null,
         '-upw' => null,
     ];
+
+    /** Get the pdffonts binary name */
+    public static function binary(): string
+    {
+        return 'pdffonts';
+    }
 
     /** @param string $pdf PDF file path */
     public function __construct(
@@ -34,7 +36,7 @@ class PdfFonts
         return $this->pdf;
     }
 
-    /** Set -f <int> first page to convert */
+    /** Set -f <int> first page to examine */
     public function firstPage(?int $page): self
     {
         $this->command['-f'] = $page;
@@ -42,7 +44,7 @@ class PdfFonts
         return $this;
     }
 
-    /** Set -l <int> last page to convert */
+    /** Set -l <int> last page to examine */
     public function lastPage(?int $page): self
     {
         $this->command['-l'] = $page;
@@ -75,9 +77,9 @@ class PdfFonts
     }
 
     /** @return string[] Build the pdffonts command array */
-    protected function buildCommand(): array
+    protected function build(): array
     {
-        $command = [self::BINARY];
+        $command = [self::binary()];
 
         foreach ($this->command as $key => $value) {
             if ($value === true) {
@@ -87,7 +89,7 @@ class PdfFonts
                 $command[] = (string) $value;
             }
         }
-        
+
         $command[] = $this->pdf;
 
         return $command;
@@ -99,30 +101,6 @@ class PdfFonts
         return $this->run();
     }
 
-    /** Execute the pdffonts command and return the output */
-    protected function run(): string
-    {
-        return Binary::run($this->buildCommand());
-    }
-
-    /** Check if pdffonts is available in the system */
-    public static function isBinaryFound(): bool
-    {
-        return Binary::exists(self::BINARY);
-    }
-
-    /** Get pdffonts version and copyright information */
-    public static function version(): string
-    {
-        return Binary::version(self::BINARY);
-    }
-
-    /** Print pdffonts usage information */
-    public static function help(): string
-    {
-        return Binary::help(self::BINARY);
-    }
-
     /** Get command options and input as an array */
     public function toArray(): array
     {
@@ -132,17 +110,5 @@ class PdfFonts
                 'input' => $this->pdf,
             ]
         );
-    }
-
-    /** Build the command as a string */
-    public function toString(): string
-    {
-        return implode(' ', $this->buildCommand());
-    }
-
-    /** Convert to string representation of the command */
-    public function __toString(): string
-    {
-        return $this->toString();
     }
 }

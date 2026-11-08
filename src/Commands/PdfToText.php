@@ -2,12 +2,8 @@
 
 namespace YakoLabs\PdfToText\Commands;
 
-use YakoLabs\PdfToText\Support\Binary;
-
-class PdfToText
+class PdfToText extends Command
 {
-    public const BINARY = Binary::PDFTOTEXT;
-
     public const HYPHENS_NONE = 'none';
 
     public const HYPHENS_SOFT = 'soft';
@@ -44,6 +40,12 @@ class PdfToText
 
     /** @var string|null <text-file> output text file path */
     protected ?string $textFile = null;
+
+    /** Get the pdftotext binary name */
+    public static function binary(): string
+    {
+        return 'pdftotext';
+    }
 
     /** @param string $pdf PDF file path */
     public function __construct(
@@ -273,9 +275,9 @@ class PdfToText
     }
 
     /** @return string[] Build the pdftotext command array */
-    protected function buildCommand(): array
+    protected function build(): array
     {
-        $command = [self::BINARY];
+        $command = [self::binary()];
 
         foreach ($this->command as $key => $value) {
             if ($value === true) {
@@ -285,7 +287,7 @@ class PdfToText
                 $command[] = (string) $value;
             }
         }
-        
+
         $command[] = $this->pdf;
 
         if ($this->textFile !== null) {
@@ -315,30 +317,6 @@ class PdfToText
         return $this->textFile('-')->run();
     }
 
-    /** Execute the pdftotext command and return the output */
-    protected function run(): string
-    {
-        return Binary::run($this->buildCommand());
-    }
-
-    /** Check if pdftotext is available in the system */
-    public static function isBinaryFound(): bool
-    {
-        return Binary::exists(self::BINARY);
-    }
-
-    /** Get pdftotext version and copyright information */
-    public static function version(): string
-    {
-        return Binary::version(self::BINARY);
-    }
-
-    /** Print pdftotext usage information */
-    public static function help(): string
-    {
-        return Binary::help(self::BINARY);
-    }
-
     /** Get command options, input and output as an array */
     public function toArray(): array
     {
@@ -349,17 +327,5 @@ class PdfToText
                 'output' => $this->textFile,
             ]
         );
-    }
-
-    /** Build the command as a string */
-    public function toString(): string
-    {
-        return implode(' ', $this->buildCommand());
-    }
-
-    /** Convert to string representation of the command */
-    public function __toString(): string
-    {
-        return $this->toString();
     }
 }

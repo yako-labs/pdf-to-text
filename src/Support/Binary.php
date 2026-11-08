@@ -2,19 +2,11 @@
 
 namespace YakoLabs\PdfToText\Support;
 
-use InvalidArgumentException;
 use YakoLabs\PdfToText\Exceptions\BinaryNotFoundException;
-use YakoLabs\PdfToText\Exceptions\ExceptionHandler;
 use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Process;
 
 class Binary
 {
-    public const PDFFONTS = 'pdffonts';
-    public const PDFINFO = 'pdfinfo';
-    public const PDFTOTEXT = 'pdftotext';
-    public const PDFUNITE = 'pdfunite';
-
     /** Get the full path to the binary */
     public static function path(string $binary): ?string
     {
@@ -39,50 +31,5 @@ class Binary
         if (self::missing($binary)) {
             throw new BinaryNotFoundException($binary);
         }
-    }
-
-    /** Get the version string of the binary */
-    public static function version(string $binary): string
-    {
-        $process = new Process([$binary, '-v']);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            return $process->getErrorOutput();
-        }
-
-        ExceptionHandler::fromProcess($process);
-    }
-
-    /** Print binary usage information */
-    public static function help(string $binary): string
-    {
-        $process = new Process([$binary, '-h']);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            return $process->getErrorOutput();
-        }
-
-        ExceptionHandler::fromProcess($process);
-    }
-
-    /** Execute a system command and return the process result */
-    public static function run(array $command): string
-    {
-        if (empty($command)) {
-            throw new InvalidArgumentException("Cannot run an empty command.");
-        }
-
-        self::require($command[0]);
-
-        $process = new Process($command);
-        $process->run();
-
-        if ($process->isSuccessful()) {
-            return $process->getOutput();
-        }
-
-        ExceptionHandler::fromProcess($process);
     }
 }

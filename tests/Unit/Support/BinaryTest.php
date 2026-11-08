@@ -25,8 +25,3 @@ test('binary is required', function () {
     expect(fn () => Binary::require('missing-binary'))
         ->toThrow(BinaryNotFoundException::class);
 });
-
-test('get binary version', function () {
-    expect(Binary::version('pdftotext'))
-        ->toBeString();
-});
